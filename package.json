@@ -1,0 +1,13 @@
+{
+  "name": "batalha-politica-live",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bridge": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "tiktok-live-connector": "^2.1.1"
+  }
+}
