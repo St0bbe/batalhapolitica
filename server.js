@@ -1,5 +1,6 @@
 import http from 'node:http';
-import { WebcastPushConnection } from 'tiktok-live-connector';
+import tiktokConnector from 'tiktok-live-connector';
+const { WebcastPushConnection } = tiktokConnector;
 
 const HOST = '127.0.0.1';
 const PORT = Number(process.env.PORT || 3001);
