@@ -1,6 +1,5 @@
 import http from 'node:http';
-import tiktokConnector from 'tiktok-live-connector';
-const { WebcastPushConnection } = tiktokConnector;
+import { TikTokLiveConnection } from 'tiktok-live-connector';
 
 const HOST = '127.0.0.1';
 const PORT = Number(process.env.PORT || 3001);
@@ -51,7 +50,7 @@ setInterval(() => { for (const c of clients) { try { c.write(': ping\n\n'); } ca
 if (!username) {
   console.log('Defina TIKTOK_USERNAME para conectar a uma LIVE.');
 } else {
-  live = new WebcastPushConnection(username, { enableExtendedGiftInfo: true });
+  live = new TikTokLiveConnection(username, { enableExtendedGiftInfo: true });
   live.on('connected', () => { connected = true; console.log('TikTok LIVE conectado: @' + username); status('Conectado à LIVE @' + username, true); });
   live.on('disconnected', () => { connected = false; status('TikTok desconectado', false); });
   live.on('streamEnd', () => { connected = false; status('LIVE encerrada', false); });
