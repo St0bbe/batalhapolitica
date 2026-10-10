@@ -3,3 +3,7 @@
 
 /* Orientação clara para quem chega na transmissão */
 .join-instructions{top:43%;left:4%;right:4%;display:flex;flex-direction:column;gap:5px;align-items:stretch;text-align:center}.join-heading{font-size:clamp(10px,1.8vw,17px);font-weight:1000;color:#fff;background:#071129ed;border:1px solid #e3cc69;border-radius:9px;padding:7px 4px;text-shadow:0 1px 5px #000;animation:joinGlow 2.5s ease-in-out infinite}.join-options{display:grid;grid-template-columns:1fr 1fr;gap:7px}.join-options span{justify-content:center;padding:6px 4px;font-size:clamp(10px,1.7vw,15px)}.join-options b{font-size:1.08em;padding:4px 7px}.join-hint{font-size:clamp(9px,1.5vw,13px);font-weight:900;text-shadow:0 2px 5px #000;background:#070e23d9;border-radius:7px;padding:4px 3px}@keyframes joinGlow{50%{box-shadow:0 0 17px #ffd75c99}}
+
+/* Feedback de pontos abaixo do placar, sem sobrepor a escolha de times */
+.burst{top:67%;left:50%;z-index:7;font-size:clamp(20px,4vw,35px);white-space:nowrap;color:#fff;background:#09132ddf;border:1px solid #b9d9ff;border-radius:12px;padding:5px 14px;box-shadow:0 0 20px #000a;text-shadow:0 0 9px #fff}
+.join-toast{top:35%;z-index:9}
