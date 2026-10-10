@@ -50,7 +50,7 @@ setInterval(() => { for (const c of clients) { try { c.write(': ping\n\n'); } ca
 if (!username) {
   console.log('Defina TIKTOK_USERNAME para conectar a uma LIVE.');
 } else {
-  live = new TikTokLiveConnection(username, { enableExtendedGiftInfo: true });
+  live = new TikTokLiveConnection(username, { enableExtendedGiftInfo: false });
   live.on('connected', () => { connected = true; console.log('TikTok LIVE conectado: @' + username); status('Conectado à LIVE @' + username, true); });
   live.on('disconnected', () => { connected = false; status('TikTok desconectado', false); });
   live.on('streamEnd', () => { connected = false; status('LIVE encerrada', false); });
