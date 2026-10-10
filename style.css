@@ -7,3 +7,8 @@
 /* Feedback de pontos abaixo do placar, sem sobrepor a escolha de times */
 .burst{top:67%;left:50%;z-index:7;font-size:clamp(20px,4vw,35px);white-space:nowrap;color:#fff;background:#09132ddf;border:1px solid #b9d9ff;border-radius:12px;padding:5px 14px;box-shadow:0 0 20px #000a;text-shadow:0 0 9px #fff}
 .join-toast{top:35%;z-index:9}
+
+/* O efeito de pontuação deve aparecer NA FRENTE de todos os painéis */
+.burst{position:absolute;top:76%;left:50%;z-index:100;transform:translate(-50%,-50%);font-size:clamp(20px,4vw,32px);line-height:1.2;white-space:nowrap;background:#081329f5;border:2px solid #f8d66d;border-radius:12px;padding:8px 18px;box-shadow:0 0 22px #000,0 0 12px #f8d66d99;isolation:isolate;pointer-events:none}
+.burst.show{animation:pointsFront 1.35s ease-out both}
+@keyframes pointsFront{0%{opacity:0;transform:translate(-50%,-35%) scale(.7)}15%,75%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-75%) scale(1)}}
