@@ -1,4 +1,6 @@
 import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
 import { TikTokLiveConnection } from 'tiktok-live-connector';
 
 const HOST = '127.0.0.1';
@@ -6,6 +8,21 @@ const PORT = Number(process.env.PORT || 3001);
 const username = (process.env.TIKTOK_USERNAME || '').replace(/^@/, '').trim();
 const clients = new Set();
 const teams = new Map();
+const teamsFile = path.resolve('tiktok-teams.json');
+try {
+  const saved = JSON.parse(fs.readFileSync(teamsFile, 'utf8'));
+  if (saved && typeof saved === 'object' && !Array.isArray(saved)) {
+    for (const [id, side] of Object.entries(saved)) if (id && (side === 0 || side === 1)) teams.set(id, side);
+  }
+  console.log('Times recuperados:', teams.size);
+} catch (err) { if (err.code !== 'ENOENT') console.warn('Não foi possível carregar os times:', err.message); }
+const saveTeams = () => {
+  try {
+    const tmp = teamsFile + '.tmp';
+    fs.writeFileSync(tmp, JSON.stringify(Object.fromEntries(teams)), { mode: 0o600 });
+    fs.renameSync(tmp, teamsFile);
+  } catch (err) { console.error('Falha ao salvar times:', err.message); }
+};
 const lastLikes = new Map();
 const lastGift = new Map();
 let connected = false;
@@ -57,11 +74,19 @@ if (!username) {
   live.on('error', err => console.error('TikTok:', err?.message || err));
   live.on('chat', data => {
     const userId = clean(data.userId || data.uniqueId);
-    const team = choose(data.comment);
-    if (team === null || !userId) return;
-    teams.set(userId, team);
-    console.log('[CHAT] @'+clean(data.uniqueId || userId)+' escolheu '+(team===0?'AZUL':'VERMELHO'));
-    emit({kind:'event',type:'comment',target:team,name:clean(data.nickname || data.uniqueId),points:5,source:'tiktok'});
+    if (!userId) return;
+    const choice = choose(data.comment);
+    if (choice !== null) {
+      const previous = teams.get(userId);
+      if (previous !== choice) {
+        teams.set(userId, choice);
+        saveTeams();
+        console.log('[CHAT] @'+clean(data.uniqueId || userId)+' escolheu '+(choice===0?'AZUL':'VERMELHO'));
+      }
+    }
+    const team = teams.get(userId);
+    if (team === undefined) return;
+    emit({kind:'event',type:'comment',target:team,name:clean(data.nickname || data.uniqueId),points:5,joined:choice !== null,source:'tiktok'});
   });
   live.on('like', data => {
     const userId = clean(data.userId || data.uniqueId);
