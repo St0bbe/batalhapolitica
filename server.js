@@ -28,6 +28,8 @@ const lastGift = new Map();
 let connected = false;
 let live;
 const clean = s => String(s ?? '').slice(0, 64);
+let receivedChats = 0;
+let forwardedChats = 0;
 const emit = event => {
   const payload = 'data: ' + JSON.stringify(event) + '\n\n';
   for (const res of clients) { try { res.write(payload); } catch { clients.delete(res); } }
@@ -44,7 +46,7 @@ const server = http.createServer((req, res) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   if (req.url === '/health') {
     res.writeHead(200, {'Content-Type':'application/json'});
-    res.end(JSON.stringify({ online: connected, configured: !!username, username }));
+    res.end(JSON.stringify({ online: connected, configured: !!username, username, receivedChats, forwardedChats, spectatorsWithTeam: teams.size, arenaClients: clients.size }));
     return;
   }
   if (req.url === '/events') {
@@ -73,8 +75,10 @@ if (!username) {
   live.on('streamEnd', () => { connected = false; status('LIVE encerrada', false); });
   live.on('error', err => console.error('TikTok:', err?.message || err));
   live.on('chat', data => {
+    receivedChats++;
     const userId = clean(data.userId || data.uniqueId);
-    if (!userId) return;
+    console.log('[RECEBIDO]', '@'+clean(data.uniqueId || userId || 'sem-id'), 'comentou:', JSON.stringify(clean(data.comment)), '| ID:', userId ? 'OK' : 'AUSENTE', '| arena conectada:', clients.size);
+    if (!userId) { console.warn('[IGNORADO] Comentário sem identificação de usuário'); return; }
     const choice = choose(data.comment);
     if (choice !== null) {
       const previous = teams.get(userId);
@@ -85,7 +89,9 @@ if (!username) {
       }
     }
     const team = teams.get(userId);
-    if (team === undefined) return;
+    if (team === undefined) { console.log('[SEM TIME] Digite azul ou vermelho para participar'); return; }
+    forwardedChats++;
+    console.log('[PONTUANDO]', '@'+clean(data.uniqueId || userId), '+5 para', team===0?'AZUL':'VERMELHO');
     emit({kind:'event',type:'comment',target:team,name:clean(data.nickname || data.uniqueId),points:5,joined:choice !== null,source:'tiktok'});
   });
   live.on('like', data => {
