@@ -81,9 +81,9 @@ if (!username) {
     receivedChats++;
     const d=eventData(data);
     const {id:userId,name}=identity(data);
-    const comment=clean(d?.comment || d?.text || d?.message);
+    const comment=clean(d?.comment || d?.content || d?.text || d?.message);
     console.log('[RECEBIDO]', '@'+(name || 'sem-id'), 'comentou:', JSON.stringify(comment), '| ID:', userId ? 'OK' : 'AUSENTE', '| arena conectada:', clients.size);
-    if ((!userId || !comment) && chatDebugCount++ < 3) console.log('[DEBUG ESTRUTURA CHAT]', JSON.stringify(data, (key,value) => /token|cookie|session|signature|secret|password/i.test(key) ? '[oculto]' : value).slice(0,3500));
+    if ((!userId || !comment) && chatDebugCount++ < 3) console.log('[DEBUG CAMPOS CHAT]', {keys:Object.keys(d || {}),comment:d?.comment,content:d?.content,text:d?.text,message:d?.message});
     if (!userId) { console.warn('[IGNORADO] Comentário sem identificação de usuário'); return; }
     const choice = choose(comment);
     if (choice !== null) {
@@ -91,13 +91,13 @@ if (!username) {
       if (previous !== choice) {
         teams.set(userId, choice);
         saveTeams();
-        console.log('[CHAT] @'+name || userId+' escolheu '+(choice===0?'AZUL':'VERMELHO'));
+        console.log('[CHAT] @'+(name || userId)+' escolheu '+(choice===0?'AZUL':'VERMELHO'));
       }
     }
     const team = teams.get(userId);
     if (team === undefined) { console.log('[SEM TIME] Digite azul ou vermelho para participar'); return; }
     forwardedChats++;
-    console.log('[PONTUANDO]', '@'+clean(data.uniqueId || userId), '+5 para', team===0?'AZUL':'VERMELHO');
+    console.log('[PONTUANDO]', '@'+(name || userId), '+5 para', team===0?'AZUL':'VERMELHO');
     emit({kind:'event',type:'comment',target:team,name:name || userId,points:5,joined:choice !== null,source:'tiktok'});
   });
   live.on('like', data => {
