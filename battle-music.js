@@ -38,6 +38,7 @@ export async function startMusic(){
   if(!Audio)throw Error('AudioContext indisponivel');
   if(!ctx){ctx=new Audio();master=ctx.createGain();master.gain.value=.46;master.connect(ctx.destination);}
   await ctx.resume();
+  if(ctx.state!=='running')throw Error('Navegador bloqueou a reprodução; clique na arena.');
   if(!playing){playing=true;beat();loopId=setInterval(beat,180);}
 }
 export function stopMusic(){playing=false;clearInterval(loopId);if(ctx)ctx.suspend();}
