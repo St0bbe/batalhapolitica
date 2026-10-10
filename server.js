@@ -18,8 +18,8 @@ const emit = event => {
 const status = (message, online = connected) => emit({ kind: 'status', online, message });
 const choose = text => {
   const t = clean(text).trim().toLowerCase();
-  if (/^!(azul|flavio|flávio|0)$/.test(t)) return 0;
-  if (/^!(vermelho|lula|1)$/.test(t)) return 1;
+  if (/^!?(azul|flavio|flávio|0)$/.test(t)) return 0;
+  if (/^!?(vermelho|lula|1)$/.test(t)) return 1;
   return null;
 };
 const server = http.createServer((req, res) => {
@@ -60,6 +60,7 @@ if (!username) {
     const team = choose(data.comment);
     if (team === null || !userId) return;
     teams.set(userId, team);
+    console.log('[CHAT] @'+clean(data.uniqueId || userId)+' escolheu '+(team===0?'AZUL':'VERMELHO'));
     emit({kind:'event',type:'comment',target:team,name:clean(data.nickname || data.uniqueId),points:5,source:'tiktok'});
   });
   live.on('like', data => {
