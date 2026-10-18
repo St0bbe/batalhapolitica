@@ -40,7 +40,7 @@ const emit = event => {
 const status = (message, online = connected) => emit({ kind: 'status', online, message });
 const choose = text => {
   const t = clean(text).trim().toLowerCase();
-  if (/^!?(azul|flavio|flávio|0)$/.test(t)) return 0;
+  if (/^!?(azul|bolsonaro|flavio|flávio|0)$/.test(t)) return 0;
   if (/^!?(vermelho|lula|1)$/.test(t)) return 1;
   return null;
 };
@@ -95,7 +95,7 @@ if (!username) {
       }
     }
     const team = teams.get(userId);
-    if (team === undefined) { console.log('[SEM TIME] Digite azul ou vermelho para participar'); return; }
+    if (team === undefined) { console.log('[SEM TIME] Digite LULA ou BOLSONARO para participar'); return; }
     forwardedChats++;
     console.log('[PONTUANDO]', '@'+(name || userId), '+5 para', team===0?'AZUL':'VERMELHO');
     emit({kind:'event',type:'comment',target:team,name:name || userId,points:5,joined:choice !== null,source:'tiktok'});
