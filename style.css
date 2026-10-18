@@ -12,3 +12,14 @@
 .burst{position:absolute;top:76%;left:50%;z-index:100;transform:translate(-50%,-50%);font-size:clamp(20px,4vw,32px);line-height:1.2;white-space:nowrap;background:#081329f5;border:2px solid #f8d66d;border-radius:12px;padding:8px 18px;box-shadow:0 0 22px #000,0 0 12px #f8d66d99;isolation:isolate;pointer-events:none}
 .burst.show{animation:pointsFront 1.35s ease-out both}
 @keyframes pointsFront{0%{opacity:0;transform:translate(-50%,-35%) scale(.7)}15%,75%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-75%) scale(1)}}
+
+/* Placar sempre visível abaixo das instruções de participação */
+.hud{top:56%;bottom:2%;gap:1%;justify-content:space-between}
+.scores{position:relative;z-index:10;flex:0 0 auto;gap:5%;}
+.scores>div{background:#07112bea;border:1px solid #6388c7;border-radius:10px;padding:5px 6px;box-shadow:0 2px 12px #000b;min-width:0}
+.scores>div:nth-child(2){border-color:#e75669}
+.scores strong{display:block;font-size:clamp(22px,5vw,42px);line-height:1.1;text-shadow:0 2px 8px #000,0 0 12px #048dff}
+.scores>div:nth-child(2) strong{text-shadow:0 2px 8px #000,0 0 12px #ff284c}
+.scores .mini{height:9px;margin-top:4px}
+.join-instructions{top:40%;}
+@media(max-width:850px){.scores strong{font-size:clamp(22px,7vw,42px)}}
