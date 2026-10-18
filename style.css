@@ -23,3 +23,9 @@
 .scores .mini{height:9px;margin-top:4px}
 .join-instructions{top:40%;}
 @media(max-width:850px){.scores strong{font-size:clamp(22px,7vw,42px)}}
+
+/* Movimento visual contínuo, sem simular interações ou pontos */
+.activity-strip{position:absolute;top:34%;left:5%;right:5%;z-index:4;text-align:center;padding:7px 4px;border-radius:9px;border:1px solid #e7c86b;background:#071129e8;color:#fff;font-size:clamp(10px,1.6vw,14px);font-weight:900;letter-spacing:.03em;animation:activityPulse 3s ease-in-out infinite}
+.activity-strip span{color:#ffd86c;animation:activityBlink 1.3s step-end infinite}
+@keyframes activityPulse{0%,100%{box-shadow:0 0 4px #ffd86c33;transform:scale(1)}50%{box-shadow:0 0 19px #ffd86caa;transform:scale(1.015)}}
+@keyframes activityBlink{50%{opacity:.2}}
