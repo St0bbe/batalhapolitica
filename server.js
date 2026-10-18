@@ -40,8 +40,8 @@ const emit = event => {
 const status = (message, online = connected) => emit({ kind: 'status', online, message });
 const choose = text => {
   const t = clean(text).trim().toLowerCase();
-  if (/^!?(azul|bolsonaro|flavio|flávio|0)$/.test(t)) return 0;
-  if (/^!?(vermelho|lula|1)$/.test(t)) return 1;
+  if (/^!?(azul|bolsonaro|22|flavio|flávio|0)$/.test(t)) return 0;
+  if (/^!?(vermelho|lula|13|1)$/.test(t)) return 1;
   return null;
 };
 const server = http.createServer((req, res) => {
